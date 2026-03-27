@@ -13,15 +13,15 @@ class LocaisRepository extends Repository
     {
         $this->model = new Local();
     }
-    public function filterPaginate(Localfilter $filters, $perpag = '15')
+    public function filterPaginated(Localfilter $filters, int $perpag = 15)
     {
         return $this->model->with(['Agendamentos'])
             ->filter($filters)
             ->orderBy('nome', 'asc')
-            ->get();
+            ->paginate($perpag);
     }
 
-    public function salvar($dados)
+    public function salvar(array $dados)
     {
         return $this->model->updateOrCreate(
             ['id' => $dados['id'] ?? null],
@@ -30,7 +30,7 @@ class LocaisRepository extends Repository
         );
     }
 
-    public function getId($id)
+    public function getId(int $id)
     {
         return $this->model->with(['agendamentos' => function ($query) {
             $query->orderBy('data', 'desc')
@@ -38,9 +38,11 @@ class LocaisRepository extends Repository
         }])->find($id);
     }
 
-    public function destroyId ($id){
-        if($this->model->Agendamentos()->count() > 0){
-           $delete =  $this->model->destroy($id);
+    public function destroyId (int $id){
+        $local = $this->model->findOrFail($id);
+
+        if($local->Agendamentos()->count() <= 0){
+           $local->delete();
            return  true;
         } else{
            throw new \Exception('existe agendamentos ligados a esse local');
@@ -48,4 +50,18 @@ class LocaisRepository extends Repository
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

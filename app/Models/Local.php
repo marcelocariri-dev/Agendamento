@@ -21,7 +21,7 @@ class Local extends Model
     ];
 
     // Relacionamentos
-    public function Agendamentos(){
+    public function agendamentos(){
         return $this->hasMany(Agendamento::class);
     }
 }
