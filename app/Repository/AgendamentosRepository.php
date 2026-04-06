@@ -23,7 +23,7 @@ public function filterPaginated(AgendamentoFIlter $filters, int $perpag)
 }
 
 public function getId(int $id){
-    return $this->model->with('locais')->find($id);
+    return $this->model->with('local')->find($id);
 
 }
 
